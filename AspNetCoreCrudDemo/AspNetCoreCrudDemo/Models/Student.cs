@@ -7,19 +7,22 @@ namespace AspNetCoreCrudDemo.Models
         [Key]
         public int StudentId { get; set; }
 
-        [Required(ErrorMessage = "Öğrenci adı zorunludur.")]
+        [Required(ErrorMessage = "Lütfen öğrenci adını giriniz.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Öğrenci adı en az 2, en fazla 50 karakter olmalıdır.")]
         [Display(Name = "Öğrenci Adı")]
         public string Name { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "E-Posta zorunludur.")]
+        [Required(ErrorMessage = "Lütfen geçerli bir e-posta adresi giriniz.")]
+        [EmailAddress(ErrorMessage = "Lütfen e-posta formatına uygun (örn: ali@örnek.com) bir adres giriniz.")]
         [Display(Name = "E-Posta Adresi")]
         public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Kurs alanı zorunludur.")]
+        [Required(ErrorMessage = "Lütfen listeden geçerli bir kurs seçiniz.")]
         [Display(Name = "Kayıtlı Olduğu Kurs")]
         public string Course { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Lütfen kayıt tarihini belirtiniz.")]
+        [DataType(DataType.Date, ErrorMessage = "Lütfen geçerli bir tarih formatı seçiniz.")]
         [Display(Name = "Kayıt Tarihi")]
         public DateTime EnrollmentDate { get; set; }
     }
