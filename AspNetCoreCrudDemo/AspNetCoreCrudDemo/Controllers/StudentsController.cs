@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using AspNetCoreCrudDemo.Data;
 using AspNetCoreCrudDemo.Models;
 
@@ -12,18 +13,22 @@ namespace AspNetCoreCrudDemo.Controllers
     {
         // Veritabanı ile konuşacak olan aracımız (Context)
         private readonly ApplicationDbContext _context;
+        // Olan biteni kara kaplı deftere kaydeden müdürümüz (Logger)
+        private readonly ILogger<StudentsController> _logger;
 
         // Constructor Injection (Bağımlılık Enjeksiyonu). 
         // Program.cs içerisindeki AddDbContext ile oluşturulan DbContext buraya otomatik olarak verilir.
-        public StudentsController(ApplicationDbContext context)
+        public StudentsController(ApplicationDbContext context, ILogger<StudentsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Students
         // 1. Index Metodu (Listeleme): Veritabanındaki tüm öğrencileri alıp View'a (Ekrana) gönderir.
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Öğrenciler listesi başarıyla görüntülendi.");
             // _context.Students verilerin bulunduğu DbSet. ToListAsync() ile veriler çekilir.
             return View(await _context.Students.ToListAsync());
         }
@@ -35,6 +40,7 @@ namespace AspNetCoreCrudDemo.Controllers
             // Eğer id gelmediyse ya da veritabanı tablosu yoksa 404 sayfasına (NotFound) yönlendirilmesi istenir.
             if (id == null || _context.Students == null)
             {
+                _logger.LogWarning("Details sayfası için geçersiz giriş yapıldı (Böyle bir tablo ya da ID yok).");
                 return NotFound();
             }
 
@@ -44,6 +50,7 @@ namespace AspNetCoreCrudDemo.Controllers
             
             if (student == null) // Öyle bir id veritabanında yoksa
             {
+                _logger.LogWarning($"{id} ID'li öğrenci arandı ama bulunamadı!");
                 return NotFound();
             }
 
@@ -71,6 +78,8 @@ namespace AspNetCoreCrudDemo.Controllers
             {
                 _context.Add(student); // Yeni veriyi context'e ekle
                 await _context.SaveChangesAsync(); // Değişiklikleri veritabanına yaz (SQL INSERT işlemi yapar)
+                
+                _logger.LogInformation($"Sisteme yepyeni bir öğrenci kaydedildi: {student.Name}");
                 
                 // Başarılı olursa PRG (Post-Redirect-Get) pattern gereği Index (listeleme) sayfasına yönlendir.
                 return RedirectToAction(nameof(Index));
@@ -114,10 +123,12 @@ namespace AspNetCoreCrudDemo.Controllers
                 {
                     _context.Update(student); // Veriyi güncel hale getir
                     await _context.SaveChangesAsync(); // Veritabanına yaz (SQL UPDATE komutu çalıştırır)
+                    _logger.LogInformation($"{student.Name} isimli öğrencinin bilgileri güncellendi.");
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     // Concurrency (Eşzamanlılık): Biz kaydederken başkası silmiş olabilir mi? kontrolü.
+                    _logger.LogError(ex, $"{student.Name} güncellenirken eştarihli bir çakışma hatası (Concurrency) yaşandı!");
                     if (!StudentExists(student.StudentId))
                     {
                         return NotFound();
@@ -170,6 +181,7 @@ namespace AspNetCoreCrudDemo.Controllers
             // Öğrenci varsa bağlamdan (context) çıkar
             if (student != null)
             {
+                _logger.LogWarning($"DİKKAT: {student.Name} isimli öğrenci veritabanından kalıcı olarak SİLİNDİ!");
                 _context.Students.Remove(student);
             }
             
