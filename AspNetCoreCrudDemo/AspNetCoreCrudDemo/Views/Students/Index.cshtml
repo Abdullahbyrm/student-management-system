@@ -1,38 +1,99 @@
 @model IEnumerable<AspNetCoreCrudDemo.Models.Student>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Öğrenci Listesi";
+    var colors = new[] { "av-blue", "av-green", "av-amber", "av-cyan", "av-danger" };
+    int colorIndex = 0;
 }
 
-<h1>Öğrenciler</h1>
+<div class="page-header fade-in-up">
+    <div>
+        <h1 class="page-title">Öğrenciler</h1>
+        <p class="page-subtitle">Kayıtlı öğrencilerin tam listesi</p>
+    </div>
+    <div class="breadcrumb-nav">
+        <a href="/"><i class="bi bi-house-door"></i> Dashboard</a> / Öğrenciler
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Yeni Öğrenci Oluştur</a>
-</p>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.Email)</th>
-            <th>@Html.DisplayNameFor(model => model.Course)</th>
-            <th>@Html.DisplayNameFor(model => model.EnrollmentDate)</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-            <td>@Html.DisplayFor(modelItem => item.Email)</td>
-            <td>@Html.DisplayFor(modelItem => item.Course)</td>
-            <td>@Html.DisplayFor(modelItem => item.EnrollmentDate)</td>
-            <td>
-                <!-- Tag Helper kullanarak a etiketine asp-action ile Controller'daki metoda yol tarif ediyoruz -->
-                <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-sm btn-warning">Düzenle</a> |
-                <a asp-action="Details" asp-route-id="@item.StudentId" class="btn btn-sm btn-info">Detaylar</a> |
-                <a asp-action="Delete" asp-route-id="@item.StudentId" class="btn btn-sm btn-danger">Sil</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="card-custom fade-in-up">
+    <div class="card-custom-header">
+        <h2 class="card-custom-title"><i class="bi bi-table me-2"></i>Öğrenci Tablosu</h2>
+    </div>
+    <div class="card-custom-body">
+        <div class="table-toolbar">
+            <div class="table-search">
+                <i class="bi bi-search"></i>
+                <input type="text" id="tableSearch" placeholder="İsim, e-posta veya kurs ara..." />
+            </div>
+            <a asp-action="Create" class="btn-premium primary">
+                <i class="bi bi-person-plus-fill"></i> Yeni Öğrenci Ekle
+            </a>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="table-wrapper">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                            <th>Öğrenci</th>
+                            <th>E-Posta</th>
+                            <th>Kurs</th>
+                            <th>Kayıt Tarihi</th>
+                            <th style="text-align:right;">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var initials = "";
+                        var parts = item.Name.Split(' ');
+                        if (parts.Length >= 2)
+                            initials = parts[0][0].ToString().ToUpper() + parts[1][0].ToString().ToUpper();
+                        else if (parts.Length == 1 && parts[0].Length >= 2)
+                            initials = parts[0].Substring(0, 2).ToUpper();
+
+                        var avatarColor = colors[colorIndex % colors.Length];
+                        colorIndex++;
+
+                        <tr>
+                            <td>
+                                <div class="name-cell">
+                                    @if (!string.IsNullOrEmpty(item.PhotoPath))
+                                    {
+                                        <img src="@item.PhotoPath" class="student-photo" alt="@item.Name" />
+                                    }
+                                    else
+                                    {
+                                        <span class="row-avatar @avatarColor">@initials</span>
+                                    }
+                                    <span class="name-cell-text">@item.Name</span>
+                                </div>
+                            </td>
+                            <td>@item.Email</td>
+                            <td><span class="badge-course">@item.Course</span></td>
+                            <td>@item.EnrollmentDate.ToString("dd MMM yyyy")</td>
+                            <td>
+                                <div class="action-btns" style="justify-content:flex-end;">
+                                    <a asp-action="Details" asp-route-id="@item.StudentId" class="btn-action view" title="Detay"><i class="bi bi-eye-fill"></i></a>
+                                    <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn-action edit" title="Düzenle"><i class="bi bi-pencil-fill"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.StudentId" class="btn-action delete" title="Sil"><i class="bi bi-trash3-fill"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h3>Henüz kayıtlı öğrenci yok</h3>
+                <p>İlk öğrenciyi eklemek için "Yeni Öğrenci Ekle" butonuna tıklayın.</p>
+            </div>
+        }
+    </div>
+</div>

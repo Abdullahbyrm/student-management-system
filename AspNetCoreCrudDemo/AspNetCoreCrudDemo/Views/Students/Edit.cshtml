@@ -1,58 +1,100 @@
 @model AspNetCoreCrudDemo.Models.Student
 
 @{
-    ViewData["Title"] = "Düzenle";
+    ViewData["Title"] = "Öğrenci Düzenle";
 }
 
-<h1>Öğrenciyi Düzenle</h1>
-
-<h4>Güncellenecek Bilgiler</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <!-- Mevcut veriyi güncelleyebilmek için ID alanının form etiketleri arasına ama gizli şekilde yazılması zorunludur -->
-            <input type="hidden" asp-for="StudentId" />
-            
-            <div class="form-group mb-3">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="Course" class="control-label"></label>
-                <select asp-for="Course" class="form-control">
-                    <option value="">-- Lütfen bir kurs seçin --</option>
-                    <option value="C# ile .NET Core (Backend)">C# ile .NET Core (Backend)</option>
-                    <option value="React & Node.js (Full Stack)">React & Node.js (Full Stack)</option>
-                    <option value="Python ile Veri Bilimi (Data Science)">Python ile Veri Bilimi (Data Science)</option>
-                    <option value="Java Spring Boot (Kurumsal Web)">Java Spring Boot (Kurumsal Web)</option>
-                    <option value="Flutter & Dart (Mobil Uygulama)">Flutter & Dart (Mobil Uygulama)</option>
-                </select>
-                <span asp-validation-for="Course" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="EnrollmentDate" class="control-label"></label>
-                <input asp-for="EnrollmentDate" class="form-control" type="date" />
-                <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3 mt-3">
-                <input type="submit" value="Değişiklikleri Kaydet" class="btn btn-warning" />
-            </div>
-        </form>
+<div class="page-header fade-in-up">
+    <div>
+        <h1 class="page-title">Öğrenci Düzenle</h1>
+        <p class="page-subtitle">Mevcut kayıt bilgilerini güncelleyin</p>
+    </div>
+    <div class="breadcrumb-nav">
+        <a href="/"><i class="bi bi-house-door"></i> Dashboard</a> /
+        <a asp-action="Index">Öğrenciler</a> / Düzenle
     </div>
 </div>
 
-<div class="mt-3">
-    <a asp-action="Index">Listeye Geri Dön</a>
+<div class="form-card fade-in-up">
+    <!-- ANA FORM (Multipart/form-data) -->
+    <form asp-action="Edit" enctype="multipart/form-data" id="editForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom:1rem;"></div>
+        <input type="hidden" asp-for="StudentId" />
+        <input type="hidden" asp-for="PhotoPath" />
+
+        <!-- Mevcut Fotoğraf Gösterimi -->
+        @if (!string.IsNullOrEmpty(Model.PhotoPath))
+        {
+            <div class="current-photo-box">
+                <img src="@Model.PhotoPath" alt="Mevcut fotoğraf" />
+                <div style="flex:1;">
+                    <div style="font-weight:600;font-size:0.9rem;color:var(--text-primary);">Mevcut Fotoğraf</div>
+                    <div style="font-size:0.78rem;color:var(--text-muted);">Yeni bir fotoğraf yüklerseniz mevcut olan silinir.</div>
+                </div>
+                <!-- SİLME BUTONU (Dışarıdaki formu tetikler) -->
+                <button type="button" class="btn-premium danger" style="font-size:0.78rem;padding:0.35rem 0.75rem;" 
+                        onclick="document.getElementById('deletePhotoForm').submit();">
+                    <i class="bi bi-trash3"></i> Fotoğrafı Kaldır
+                </button>
+            </div>
+        }
+
+        <div class="form-group-premium">
+            <label asp-for="Name" class="control-label"><i class="bi bi-person me-1"></i> Öğrenci Adı</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-premium">
+            <label asp-for="Email" class="control-label"><i class="bi bi-envelope me-1"></i> E-Posta Adresi</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-premium">
+            <label asp-for="Course" class="control-label"><i class="bi bi-book me-1"></i> Kayıtlı Kurs</label>
+            <select asp-for="Course" class="form-control">
+                <option value="">-- Lütfen bir kurs seçin --</option>
+                <option value="C# ile .NET Core (Backend)">C# ile .NET Core (Backend)</option>
+                <option value="React &amp; Node.js (Full Stack)">React &amp; Node.js (Full Stack)</option>
+                <option value="Python ile Veri Bilimi (Data Science)">Python ile Veri Bilimi (Data Science)</option>
+                <option value="Java Spring Boot (Kurumsal Web)">Java Spring Boot (Kurumsal Web)</option>
+                <option value="Flutter &amp; Dart (Mobil Uygulama)">Flutter &amp; Dart (Mobil Uygulama)</option>
+            </select>
+            <span asp-validation-for="Course" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-premium">
+            <label asp-for="EnrollmentDate" class="control-label"><i class="bi bi-calendar-event me-1"></i> Kayıt Tarihi</label>
+            <input asp-for="EnrollmentDate" class="form-control" type="date" />
+            <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-premium">
+            <label class="control-label"><i class="bi bi-camera me-1"></i> Yeni Fotoğraf Yükle</label>
+            <div class="photo-upload-area">
+                <i class="bi bi-cloud-arrow-up"></i>
+                <span>Dosya seçmek için buraya tıklayın</span>
+                <input type="file" name="Photo" id="photoInput" accept="image/*" />
+            </div>
+            <div class="photo-preview" id="photoPreview"></div>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;margin-top:2.5rem;">
+            <button type="submit" class="btn-premium warning">
+                <i class="bi bi-pencil-square"></i> Değişiklikleri Kaydet
+            </button>
+            <a asp-action="Index" class="btn-premium outline">
+                <i class="bi bi-arrow-left"></i> Listeye Dön
+            </a>
+        </div>
+    </form>
 </div>
+
+<!-- FOTOĞRAF SİLME FORMU (Ana formun tamamen dışında!) -->
+<form asp-action="DeletePhoto" asp-route-id="@Model.StudentId" method="post" id="deletePhotoForm" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

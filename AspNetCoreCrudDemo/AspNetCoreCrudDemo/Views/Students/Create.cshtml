@@ -1,62 +1,72 @@
 @model AspNetCoreCrudDemo.Models.Student
 
 @{
-    ViewData["Title"] = "Yeni Ekle";
+    ViewData["Title"] = "Yeni Öğrenci Ekle";
 }
 
-<h1>Yeni Öğrenci Ekle</h1>
-
-<h4>Öğrenci Bilgileri</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <!-- asp-action="Create" özelliği, bu formun kontrolcüdeki [HttpPost] Create metoduna gideceğini belirtir -->
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Course" class="control-label"></label>
-                <select asp-for="Course" class="form-control">
-                    <option value="">-- Lütfen bir kurs seçin --</option>
-                    <option value="C# ile .NET Core (Backend)">C# ile .NET Core (Backend)</option>
-                    <option value="React & Node.js (Full Stack)">React & Node.js (Full Stack)</option>
-                    <option value="Python ile Veri Bilimi (Data Science)">Python ile Veri Bilimi (Data Science)</option>
-                    <option value="Java Spring Boot (Kurumsal Web)">Java Spring Boot (Kurumsal Web)</option>
-                    <option value="Flutter & Dart (Mobil Uygulama)">Flutter & Dart (Mobil Uygulama)</option>
-                </select>
-                <span asp-validation-for="Course" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="EnrollmentDate" class="control-label"></label>
-                <input asp-for="EnrollmentDate" class="form-control" type="date" />
-                <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3 mt-3">
-                <input type="submit" value="Kaydet" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="page-header fade-in-up">
+    <div>
+        <h1 class="page-title">Yeni Öğrenci Ekle</h1>
+        <p class="page-subtitle">Sisteme yeni bir öğrenci kaydedin</p>
+    </div>
+    <div class="breadcrumb-nav">
+        <a href="/"><i class="bi bi-house-door"></i> Dashboard</a> /
+        <a asp-action="Index">Öğrenciler</a> / Yeni Ekle
     </div>
 </div>
 
-<div class="mt-3">
-    <a asp-action="Index">Listeye Geri Dön</a>
+<div class="form-card fade-in-up">
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom:1rem;"></div>
+
+        <div class="form-group-premium">
+            <label asp-for="Name" class="control-label"><i class="bi bi-person me-1"></i> Öğrenci Adı</label>
+            <input asp-for="Name" class="form-control" placeholder="Örn: Ali Yılmaz" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-premium">
+            <label asp-for="Email" class="control-label"><i class="bi bi-envelope me-1"></i> E-Posta Adresi</label>
+            <input asp-for="Email" class="form-control" placeholder="Örn: ali@ornek.com" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-premium">
+            <label asp-for="Course" class="control-label"><i class="bi bi-book me-1"></i> Kayıtlı Kurs</label>
+            <select asp-for="Course" class="form-control">
+                <option value="">-- Lütfen bir kurs seçin --</option>
+                <option value="C# ile .NET Core (Backend)">C# ile .NET Core (Backend)</option>
+                <option value="React &amp; Node.js (Full Stack)">React &amp; Node.js (Full Stack)</option>
+                <option value="Python ile Veri Bilimi (Data Science)">Python ile Veri Bilimi (Data Science)</option>
+                <option value="Java Spring Boot (Kurumsal Web)">Java Spring Boot (Kurumsal Web)</option>
+                <option value="Flutter &amp; Dart (Mobil Uygulama)">Flutter &amp; Dart (Mobil Uygulama)</option>
+            </select>
+            <span asp-validation-for="Course" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-premium">
+            <label asp-for="EnrollmentDate" class="control-label"><i class="bi bi-calendar-event me-1"></i> Kayıt Tarihi</label>
+            <input asp-for="EnrollmentDate" class="form-control" type="date" />
+            <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-premium">
+            <label class="control-label"><i class="bi bi-camera me-1"></i> Fotoğraf (Opsiyonel)</label>
+            <div class="photo-upload-area">
+                <i class="bi bi-cloud-arrow-up"></i>
+                <span>Fotoğraf yüklemek için tıklayın veya sürükleyin</span>
+                <input type="file" name="Photo" id="photoInput" accept="image/*" />
+            </div>
+            <div class="photo-preview" id="photoPreview"></div>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;margin-top:1.5rem;">
+            <button type="submit" class="btn-premium primary"><i class="bi bi-check-lg"></i> Kaydet</button>
+            <a asp-action="Index" class="btn-premium outline"><i class="bi bi-arrow-left"></i> Listeye Dön</a>
+        </div>
+    </form>
 </div>
 
-<!-- İstemci tarafında sayfa yenilenmeden hataları göstermek için gerekli betikler. (Phase 7 için zemin hazırlığı) -->
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
