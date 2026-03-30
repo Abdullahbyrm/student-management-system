@@ -1,5 +1,7 @@
 using AspNetCoreCrudDemo.Data;
 using Microsoft.EntityFrameworkCore;
+using AspNetCoreCrudDemo.Interfaces;
+using AspNetCoreCrudDemo.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Aşçıyı (Repository) ve Menüsünü sisteme tanıtıyoruz. (Bağımlılık Enjeksiyonu / DI)
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 var app = builder.Build();
 
