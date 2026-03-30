@@ -25,5 +25,9 @@ namespace AspNetCoreCrudDemo.Models
         [DataType(DataType.Date, ErrorMessage = "Lütfen geçerli bir tarih formatı seçiniz.")]
         [Display(Name = "Kayıt Tarihi")]
         public DateTime EnrollmentDate { get; set; }
+
+        // Fotoğraf dosya yolu (nullable — fotoğraf zorunlu değil)
+        [Display(Name = "Fotoğraf")]
+        public string? PhotoPath { get; set; }
     }
 }

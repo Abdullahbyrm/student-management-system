@@ -8,10 +8,8 @@ using AspNetCoreCrudDemo.Models;
 
 namespace AspNetCoreCrudDemo.Repositories
 {
-    // Bu sınıf(Aşçı), üstteki IStudentRepository (Menü) içindeki kuralları mecburi olarak barındırmak zorundadır.
     public class StudentRepository : IStudentRepository
     {
-        // Mutfak Dolabımız (Veritabanı)
         private readonly ApplicationDbContext _context;
 
         public StudentRepository(ApplicationDbContext context)
@@ -51,6 +49,17 @@ namespace AspNetCoreCrudDemo.Repositories
         public bool StudentExists(int id)
         {
             return (_context.Students?.Any(e => e.StudentId == id)).GetValueOrDefault();
+        }
+
+        public async Task<IEnumerable<Student>> SearchAsync(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query)) return Enumerable.Empty<Student>();
+
+            var q = query.ToLower();
+            return await _context.Students
+                .Where(s => s.Name.ToLower().Contains(q) || s.Email.ToLower().Contains(q))
+                .Take(8)
+                .ToListAsync();
         }
     }
 }

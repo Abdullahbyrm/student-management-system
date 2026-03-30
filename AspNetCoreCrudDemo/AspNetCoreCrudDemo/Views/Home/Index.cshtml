@@ -1,8 +1,112 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@using AspNetCoreCrudDemo.Models
+@{
+    ViewData["Title"] = "Dashboard";
+    int totalStudents = ViewBag.TotalStudents ?? 0;
+    int totalCourses = ViewBag.TotalCourses ?? 0;
+    int thisMonth = ViewBag.ThisMonthCount ?? 0;
+    var recentStudents = (List<Student>?)ViewBag.RecentStudents ?? new List<Student>();
+    var colors = new[] { "av-blue", "av-green", "av-amber", "av-cyan", "av-danger" };
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="page-header fade-in-up">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Öğrenci yönetim sisteminize hoş geldiniz</p>
+    </div>
+    <div class="breadcrumb-nav"><i class="bi bi-house-door"></i> Ana Sayfa</div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card blue fade-in-up fade-in-up-1">
+        <div class="stat-card-header"><div class="stat-card-icon"><i class="bi bi-people-fill"></i></div></div>
+        <div class="stat-card-value">@totalStudents</div>
+        <div class="stat-card-label">Toplam Öğrenci</div>
+    </div>
+    <div class="stat-card green fade-in-up fade-in-up-2">
+        <div class="stat-card-header"><div class="stat-card-icon"><i class="bi bi-book-fill"></i></div></div>
+        <div class="stat-card-value">@totalCourses</div>
+        <div class="stat-card-label">Aktif Kurs</div>
+    </div>
+    <div class="stat-card amber fade-in-up fade-in-up-3">
+        <div class="stat-card-header"><div class="stat-card-icon"><i class="bi bi-calendar-check-fill"></i></div></div>
+        <div class="stat-card-value">@thisMonth</div>
+        <div class="stat-card-label">Bu Ay Kayıt</div>
+    </div>
+    <div class="stat-card cyan fade-in-up fade-in-up-4">
+        <div class="stat-card-header"><div class="stat-card-icon"><i class="bi bi-mortarboard-fill"></i></div></div>
+        <div class="stat-card-value">5</div>
+        <div class="stat-card-label">Toplam Kurs Seçeneği</div>
+    </div>
+</div>
+
+<div class="quick-actions fade-in-up">
+    <a asp-controller="Students" asp-action="Create" class="btn-premium primary"><i class="bi bi-person-plus-fill"></i> Yeni Öğrenci Ekle</a>
+    <a asp-controller="Students" asp-action="Index" class="btn-premium outline"><i class="bi bi-list-ul"></i> Tüm Listeyi Gör</a>
+</div>
+
+<div class="card-custom fade-in-up">
+    <div class="card-custom-header">
+        <h2 class="card-custom-title"><i class="bi bi-clock-history me-2"></i>Son Eklenen Öğrenciler</h2>
+        <a asp-controller="Students" asp-action="Index" class="btn-premium outline" style="font-size:0.8rem;padding:0.4rem 0.85rem;">Tümünü Gör <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="card-custom-body" style="padding:0;">
+        @if (recentStudents.Any())
+        {
+            <div class="table-wrapper">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                            <th>Öğrenci</th>
+                            <th>E-Posta</th>
+                            <th>Kurs</th>
+                            <th>Kayıt Tarihi</th>
+                            <th style="text-align:right;">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int ci = 0; }
+                        @foreach (var s in recentStudents)
+                        {
+                            var initials = "";
+                            var parts = s.Name.Split(' ');
+                            if (parts.Length >= 2) initials = parts[0][0].ToString().ToUpper() + parts[1][0].ToString().ToUpper();
+                            else if (parts.Length == 1 && parts[0].Length >= 2) initials = parts[0].Substring(0, 2).ToUpper();
+                            var avatarColor = colors[ci % colors.Length];
+                            ci++;
+
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        @if (!string.IsNullOrEmpty(s.PhotoPath))
+                                        {
+                                            <img src="@s.PhotoPath" class="student-photo" alt="@s.Name" />
+                                        }
+                                        else
+                                        {
+                                            <span class="row-avatar @avatarColor">@initials</span>
+                                        }
+                                        <span class="name-cell-text">@s.Name</span>
+                                    </div>
+                                </td>
+                                <td>@s.Email</td>
+                                <td><span class="badge-course">@s.Course</span></td>
+                                <td>@s.EnrollmentDate.ToString("dd MMM yyyy")</td>
+                                <td style="text-align:right;">
+                                    <a asp-controller="Students" asp-action="Details" asp-route-id="@s.StudentId" class="btn-action view" title="Detay"><i class="bi bi-eye-fill"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h3>Henüz kayıtlı öğrenci yok</h3>
+                <p>İlk öğrenciyi eklemek için "Yeni Öğrenci Ekle" butonuna tıklayın.</p>
+            </div>
+        }
+    </div>
 </div>
