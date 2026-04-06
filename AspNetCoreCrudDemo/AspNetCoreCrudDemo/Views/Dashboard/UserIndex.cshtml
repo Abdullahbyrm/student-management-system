@@ -1,0 +1,113 @@
+@{
+    ViewData["Title"] = "Öğrenci Paneli";
+}
+
+<div class="page-header fade-in-up">
+    <div>
+        <h1 class="page-title">Merhaba, @ViewBag.UserName! 👋</h1>
+        <p class="page-subtitle">Öğrenim yolculuğuna kaldığın yerden devam et.</p>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <!-- Welcome Info Card -->
+    <div class="col-lg-8">
+        <div class="user-welcome-card glass-card fade-in-up">
+            <div class="welcome-content">
+                <span class="welcome-label">Şu Anki Eğitimin</span>
+                <h2 class="welcome-title">@ViewBag.CourseName</h2>
+                
+                <div class="progress-section mt-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="progress-text">Kurs İlerlemesi</span>
+                        <span class="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 5%;"></div>
+                    </div>
+                </div>
+
+                <div class="welcome-footer mt-5">
+                    <button class="btn btn-primary rounded-pill px-5 py-3 fw-bold" onclick="showToast('Ders içerikleri hazırlanıyor...')">
+                        <i class="bi bi-play-fill me-2"></i> Eğitime Devam Et
+                    </button>
+                </div>
+            </div>
+            <div class="welcome-illustration">
+                <i class="bi bi-rocket-takeoff-fill"></i>
+            </div>
+            <div class="card-glow blue"></div>
+        </div>
+
+        <div class="mt-4 fade-in-up delay-1">
+            <h4 class="section-title-small mb-3">Yaklaşan Derslerin</h4>
+            <div class="empty-state-small glass-card">
+                <i class="bi bi-calendar-event mb-2"></i>
+                <p>Henüz planlanmış bir canlı dersin yok.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Info -->
+    <div class="col-lg-4">
+        <div class="profile-summary-card glass-card fade-in-up delay-2">
+            <div class="profile-header text-center mb-4">
+                <div class="profile-avatar-large">@ViewBag.UserName.Substring(0,1)</div>
+                <h4 class="mt-3 mb-1">@ViewBag.UserName</h4>
+                <span class="badge bg-info-subtle text-info px-3 py-2 rounded-pill">Öğrenci Hesabı</span>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="profile-stat-item">
+                    <i class="bi bi-book"></i>
+                    <span>1 Aktif Kurs</span>
+                </div>
+                <div class="profile-stat-item">
+                    <i class="bi bi-award"></i>
+                    <span>0 Sertifika</span>
+                </div>
+                <div class="profile-stat-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>0 Saat Eğitim</span>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-top border-secondary">
+                <button class="btn btn-outline-primary w-100 rounded-pill py-3" onclick="showToast('Profil düzenleme yakında!')">
+                    <i class="bi bi-gear me-2"></i> Profili Düzenle
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* USER DASHBOARD STYLES */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-light);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow);
+}
+.user-welcome-card { position: relative; min-height: 350px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; padding: 3rem !important; }
+.welcome-content { z-index: 2; flex: 1; }
+.welcome-label { color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8125rem; margin-bottom: 1rem; display: block; }
+.welcome-title { color: var(--text-primary); font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+
+.progress-bar-container { width: 100%; height: 10px; background: var(--border-light); border-radius: 10px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(to right, #3b82f6, #6366f1); border-radius: 10px; }
+.progress-text, .progress-percent { font-size: 0.875rem; color: var(--text-secondary); font-weight: 600; }
+
+.welcome-illustration { font-size: 8rem; color: rgba(59, 130, 246, 0.1); transform: rotate(15deg); position: absolute; right: -20px; top: 20px; z-index: 1; }
+
+.profile-avatar-large { width: 100px; height: 100px; background: linear-gradient(135deg, #3b82f6, var(--primary)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; margin: 0 auto; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); border: 4px solid var(--border-light); }
+
+.profile-stats { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+.profile-stat-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border: 1px solid var(--border-light); border-radius: 1rem; color: var(--text-primary); font-weight: 600; }
+.profile-stat-item i { color: var(--primary); font-size: 1.25rem; }
+
+.section-title-small { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; }
+.empty-state-small { text-align: center; padding: 3rem !important; color: var(--text-secondary); font-weight: 500; font-size: 0.9375rem; }
+.empty-state-small i { font-size: 2rem; display: block; }
+</style>

@@ -1,0 +1,15 @@
+﻿  Geri y├╝klenecek projeler belirleniyor...
+  Geri y├╝kleme i├ğin t├╝m projeler g├╝ncel.
+C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\Migrations\20260328184328_initial.cs(9,26): warning CS8981: ÔÇ£initialÔÇØ t├╝r ad─▒ yaln─▒zca k├╝├ğ├╝k harfli ascii karakterleri i├ğerir. Bu t├╝r adlar dil i├ğin ayr─▒lm─▒┼ş hale gelebilir. [C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\AspNetCoreCrudDemo.csproj]
+C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\Migrations\20260328184328_initial.Designer.cs(16,19): warning CS8981: ÔÇ£initialÔÇØ t├╝r ad─▒ yaln─▒zca k├╝├ğ├╝k harfli ascii karakterleri i├ğerir. Bu t├╝r adlar dil i├ğin ayr─▒lm─▒┼ş hale gelebilir. [C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\AspNetCoreCrudDemo.csproj]
+C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\Controllers\AccountController.cs(205,74): error CS0103: 'ExternalLoginDefaults' ad─▒ ge├ğerli ba─şlamda yok [C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\AspNetCoreCrudDemo.csproj]
+
+Olu┼şturma BA┼ŞARISIZ OLDU.
+
+C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\Migrations\20260328184328_initial.cs(9,26): warning CS8981: ÔÇ£initialÔÇØ t├╝r ad─▒ yaln─▒zca k├╝├ğ├╝k harfli ascii karakterleri i├ğerir. Bu t├╝r adlar dil i├ğin ayr─▒lm─▒┼ş hale gelebilir. [C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\AspNetCoreCrudDemo.csproj]
+C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\Migrations\20260328184328_initial.Designer.cs(16,19): warning CS8981: ÔÇ£initialÔÇØ t├╝r ad─▒ yaln─▒zca k├╝├ğ├╝k harfli ascii karakterleri i├ğerir. Bu t├╝r adlar dil i├ğin ayr─▒lm─▒┼ş hale gelebilir. [C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\AspNetCoreCrudDemo.csproj]
+C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\Controllers\AccountController.cs(205,74): error CS0103: 'ExternalLoginDefaults' ad─▒ ge├ğerli ba─şlamda yok [C:\dev\student-management-system\AspNetCoreCrudDemo\AspNetCoreCrudDemo\AspNetCoreCrudDemo.csproj]
+    2 Uyar─▒
+    1 Hata
+
+Ge├ğen S├╝re 00:00:01.35

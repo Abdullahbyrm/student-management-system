@@ -1,0 +1,340 @@
+@model AspNetCoreCrudDemo.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="auth-page-wrapper">
+    <!-- Hareketli Mesh Gradient Arka Plan -->
+    <div class="mesh-bg"></div>
+
+    <div class="auth-container fade-up">
+        <div class="auth-logo">
+            <i class="bi bi-mortarboard-fill"></i>
+            <span>StudentMS</span>
+        </div>
+
+        <div class="auth-glass-card">
+            <div class="auth-header">
+                <h2>Hoş Geldiniz</h2>
+                <p>Devam etmek için lütfen giriş yapın</p>
+            </div>
+
+            <form asp-action="Login" method="post" class="auth-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger auth-error-summary"></div>
+
+                <div class="auth-input-group">
+                    <label asp-for="UsernameOrEmail">Kullanıcı Adı veya E-posta</label>
+                    <div class="input-field">
+                        <i class="bi bi-person-circle"></i>
+                        <input asp-for="UsernameOrEmail" placeholder="username@example.com" autofocus />
+                    </div>
+                    <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
+                </div>
+
+                <div class="auth-input-group">
+                    <label asp-for="Password">Şifre</label>
+                    <div class="input-field">
+                        <i class="bi bi-lock-fill"></i>
+                        <input asp-for="Password" type="password" placeholder="••••••••" />
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="auth-remember-row">
+                    <label class="custom-checkbox">
+                        <input asp-for="RememberMe" />
+                        <span class="checkmark"></span>
+                        Beni Hatırla
+                    </label>
+                    <a href="#" class="forgot-password">Şifremi Unuttum?</a>
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <span>Giriş Yap</span>
+                    <i class="bi bi-arrow-right-short"></i>
+                </button>
+            </form>
+
+            <div class="auth-divider">
+                <span>Veya şununla devam et</span>
+            </div>
+
+            <div class="auth-social-row">
+                <a asp-action="ExternalLogin" asp-route-provider="Google" class="social-btn google">
+                    <i class="bi bi-google"></i>
+                    <span>Google</span>
+                </a>
+                <a asp-action="ExternalLogin" asp-route-provider="GitHub" class="social-btn github">
+                    <i class="bi bi-github"></i>
+                    <span>GitHub</span>
+                </a>
+            </div>
+
+            <div class="auth-footer">
+                Henüz bir hesabınız yok mu? 
+                <a asp-action="Register">Hemen Kayıt Olun</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* LOGIN & REGISTER PREMIUM STYLES */
+.auth-page-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #f8fafc; /* LIGHT MODE BACKGROUND */
+    z-index: 9999; /* Sidebar ve Navbar'ın üstünde olması için */
+}
+
+.mesh-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, rgba(34, 197, 94, 0.05) 0, transparent 50%), 
+                radial-gradient(at 50% 100%, rgba(37, 99, 235, 0.15) 0, transparent 50%);
+    z-index: 1;
+    animation: meshShift 15s ease-in-out infinite alternate;
+}
+
+@@keyframes meshShift {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+.auth-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 440px;
+    padding: 2rem;
+}
+
+.auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a; /* TEXT DARK */
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.02em;
+}
+
+.auth-logo i {
+    color: #3b82f6;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+}
+
+.auth-glass-card {
+    background: rgba(255, 255, 255, 0.8); /* LIGHT GLASS */
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.05); /* LIGHT BORDER */
+    border-radius: 2rem;
+    padding: 3rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); /* SOFTER SHADOW */
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.auth-header h2 {
+    color: #0f172a; /* TEXT DARK */
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    color: #64748b; /* TEXT GRAY */
+    font-size: 1rem;
+}
+
+.auth-input-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-input-group label {
+    display: block;
+    color: #475569; /* TEXT MEDIUM */
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.input-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-field i {
+    position: absolute;
+    left: 1.25rem;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    transition: 0.3s;
+}
+
+.input-field input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9); /* LIGHT BG */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    padding: 1rem 1.25rem 1rem 3.25rem;
+    color: #0f172a; /* TEXT DARK */
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.input-field input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.input-field input:focus + i {
+    color: #3b82f6;
+}
+
+.auth-remember-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1.5rem 0 2rem;
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b; /* LIGHT THEME CHECKBOX TEXT */
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: #3b82f6;
+    font-size: 0.875rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    padding: 1.1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.4);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: #64748b; /* GRAY TEXT */
+    font-size: 0.9375rem;
+}
+
+.auth-footer a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+/* SOCIAL LOGIN STYLES */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: #94a3b8; /* LIGHT THEME TEXT */
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.auth-divider::before, .auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* LIGHT DIVIDER LINE */
+}
+
+.auth-divider span {
+    padding: 0 1rem;
+}
+
+.auth-social-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.85rem;
+    border-radius: 1rem;
+    background: #ffffff; /* WHITE BUTTON */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* BORDER DARK */
+    color: #0f172a; /* TEXT DARK */
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-btn:hover {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); /* LIGHTER SHADOW */
+}
+
+.social-btn.google i { color: #ea4335; }
+.social-btn.github i { color: #0f172a; } /* DARK LOGO IN LIGHT THEME */
+
+.social-btn:hover.google { border-color: rgba(234, 67, 53, 0.3); }
+.social-btn:hover.github { border-color: rgba(0, 0, 0, 0.3); }
+
+.auth-error-summary ul {
+    list-style: none;
+    padding: 0;
+    font-size: 0.875rem;
+}
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

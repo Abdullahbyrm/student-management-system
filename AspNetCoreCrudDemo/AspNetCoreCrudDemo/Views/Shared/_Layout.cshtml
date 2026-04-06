@@ -15,48 +15,100 @@
 <body>
 
     <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-brand">
-            <div class="sidebar-brand-icon"><i class="bi bi-mortarboard-fill"></i></div>
-            <span class="sidebar-brand-text">StudentMS</span>
-        </div>
-        <nav class="sidebar-nav">
-            <div class="sidebar-nav-label">Ana Menü</div>
-            <a href="/" class="sidebar-link"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
-            <a asp-controller="Students" asp-action="Index" class="sidebar-link"><i class="bi bi-people-fill"></i><span>Öğrenciler</span></a>
-            <a asp-controller="Students" asp-action="Create" class="sidebar-link"><i class="bi bi-person-plus-fill"></i><span>Yeni Kayıt</span></a>
-            <div class="sidebar-nav-label" style="margin-top:1rem;">Sistem</div>
-            <a href="#" class="sidebar-link" onclick="showToast('Ayarlar sayfası yakında!'); return false;"><i class="bi bi-gear-fill"></i><span>Ayarlar</span></a>
-            <a href="#" class="sidebar-link" onclick="showToast('Raporlar yakında!'); return false;"><i class="bi bi-bar-chart-line-fill"></i><span>Raporlar</span></a>
-        </nav>
-        <div class="sidebar-footer">
-            <div class="sidebar-user">
-                <div class="sidebar-avatar">AB</div>
-                <div class="sidebar-user-info">
-                    <div class="sidebar-user-name">Abdullah Bayram</div>
-                    <div class="sidebar-user-role">Administrator</div>
+    @if (ViewData["HideSidebar"] == null || (bool)ViewData["HideSidebar"] == false)
+    {
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon"><i class="bi bi-mortarboard-fill"></i></div>
+                <span class="sidebar-brand-text">StudentMS</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-label">Genel</div>
+                <a href="/" class="sidebar-link"><i class="bi bi-house-heart"></i><span>Ana Sayfa</span></a>
+
+                @if (Context.User.Identity != null && Context.User.Identity.IsAuthenticated)
+                {
+                    <div class="sidebar-nav-label" style="margin-top:1rem;">Yönetim Paneli</div>
+                    <a asp-controller="Dashboard" asp-action="Index" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Panelim</span>
+                    </a>
+
+                    @if (Context.User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Students" asp-action="Index" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Students" ? "active" : "")">
+                            <i class="bi bi-people-fill"></i>
+                            <span>Öğrenciler</span>
+                        </a>
+                        <a asp-controller="Students" asp-action="Create" class="sidebar-link"><i class="bi bi-person-plus-fill"></i><span>Öğrenci Ekle</span></a>
+                    }
+
+                    <div class="sidebar-nav-label" style="margin-top:1rem;">Sistem</div>
+                    <a href="#" class="sidebar-link" onclick="showToast('Ayarlar sayfası yakında!'); return false;"><i class="bi bi-gear-fill"></i><span>Ayarlar</span></a>
+                    <a href="#" class="sidebar-link" onclick="showToast('Raporlar yakında!'); return false;"><i class="bi bi-bar-chart-line-fill"></i><span>Raporlar</span></a>
+                }
+                
+                <div class="sidebar-nav-label" style="margin-top:1rem;">Üyelik</div>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    @if (Context.User.Identity != null && Context.User.Identity.IsAuthenticated)
+                    {
+                        <div class="sidebar-avatar" style="background: linear-gradient(135deg, #2563EB, #06B6D4);">@Context.User.Identity.Name?.Substring(0, 1).ToUpper()</div>
+                        <div class="sidebar-user-info">
+                            <div class="sidebar-user-name">@Context.User.Identity.Name</div>
+                            <div class="sidebar-user-role">@(Context.User.IsInRole("Admin") ? "Sistem Yöneticisi" : "Öğrenci / Üye")</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="sidebar-avatar">?</div>
+                        <div class="sidebar-user-info">
+                            <div class="sidebar-user-name">Misafir</div>
+                            <div class="sidebar-user-role">Giriş Yapılmadı</div>
+                        </div>
+                    }
                 </div>
             </div>
-        </div>
-    </aside>
+        </aside>
+    }
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- MAIN CONTENT -->
-    <div class="main-wrapper">
+    <div class="main-wrapper @(ViewData["HideSidebar"] != null && (bool)ViewData["HideSidebar"] == true ? "no-sidebar" : "")">
         <header class="top-navbar">
             <div class="navbar-left">
                 <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menü"><i class="bi bi-list"></i></button>
-                <div class="navbar-search" style="position:relative;">
-                    <i class="bi bi-search"></i>
-                    <input type="text" id="navbarSearch" placeholder="Öğrenci ara..." autocomplete="off" />
-                    <div class="search-results-dropdown" id="searchDropdown"></div>
-                </div>
+                @if (Context.User.IsInRole("Admin"))
+                {
+                    <div class="navbar-search" style="position:relative;">
+                        <i class="bi bi-search"></i>
+                        <input type="text" id="navbarSearch" placeholder="Öğrenci ara..." autocomplete="off" />
+                        <div class="search-results-dropdown" id="searchDropdown"></div>
+                    </div>
+                }
             </div>
             <div class="navbar-right">
                 <button class="navbar-icon-btn" id="themeToggle" title="Tema"><i class="bi bi-moon-stars-fill"></i></button>
                 <button class="navbar-icon-btn" title="Bildirimler" onclick="showToast('Yeni bildirim yok.')"><i class="bi bi-bell-fill"></i><span class="notification-badge"></span></button>
-                <button class="navbar-icon-btn" title="Profil"><i class="bi bi-person-circle"></i></button>
+                @if (Context.User.Identity != null && Context.User.Identity.IsAuthenticated)
+                {
+                    <div class="dropdown d-inline-block">
+                        <button class="navbar-icon-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Hesabım">
+                            <i class="bi bi-person-circle"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" style="background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); padding: 0.5rem; min-width: 200px; z-index: 1050; margin-top: 10px;">
+                            <li><h6 class="dropdown-header" style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Hoş Geldin, @Context.User.Identity.Name</h6></li>
+                            <li><a class="dropdown-item" href="#" onclick="showToast('Profil yönetimi çok yakında!'); return false;" style="color: var(--text-color); border-radius: 6px; padding: 0.5rem 1rem; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'"><i class="bi bi-person me-2"></i>Profilim</a></li>
+                            <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.1);"></li>
+                            <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout" style="border-radius: 6px; padding: 0.5rem 1rem; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.1)'" onmouseout="this.style.background='transparent'"><i class="bi bi-box-arrow-right me-2"></i>Çıkış Yap</a></li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="navbar-icon-btn" title="Giriş Yap"><i class="bi bi-box-arrow-in-right"></i></a>
+                }
             </div>
         </header>
 

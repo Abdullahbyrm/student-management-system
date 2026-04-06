@@ -1,0 +1,150 @@
+@{
+    ViewData["Title"] = "Yönetim Paneli";
+}
+
+<div class="page-header fade-in-up">
+    <div>
+        <h1 class="page-title">Yönetim Paneli</h1>
+        <p class="page-subtitle">Sistem genelindeki istatistikler ve öğrenci özeti</p>
+    </div>
+    <div class="breadcrumb-nav">
+        <a href="/"><i class="bi bi-house-door"></i> Ana Sayfa</a> / Dashboard
+    </div>
+</div>
+
+<div class="dashboard-grid fade-in-up">
+    <!-- Stat Card 1 -->
+    <div class="stat-card glass-card">
+        <div class="card-icon blue"><i class="bi bi-people-fill"></i></div>
+        <div class="card-info">
+            <span class="stat-label">Toplam Öğrenci</span>
+            <h3 class="stat-number">@ViewBag.TotalStudents</h3>
+            <span class="stat-trend neutral"><i class="bi bi-dash"></i> Statik</span>
+        </div>
+        <div class="card-glow blue"></div>
+    </div>
+
+    <!-- Stat Card 2 -->
+    <div class="stat-card glass-card">
+        <div class="card-icon amber"><i class="bi bi-shield-lock-fill"></i></div>
+        <div class="card-info">
+            <span class="stat-label">Aktif Kullanıcı</span>
+            <h3 class="stat-number">@ViewBag.TotalUsers</h3>
+            <span class="stat-trend up"><i class="bi bi-arrow-up-short"></i> Artış</span>
+        </div>
+        <div class="card-glow amber"></div>
+    </div>
+
+    <!-- Stat Card 3 -->
+    <div class="stat-card glass-card">
+        <div class="card-icon green"><i class="bi bi-mortarboard-fill"></i></div>
+        <div class="card-info">
+            <span class="stat-label">En Popüler Kurs</span>
+            <h3 class="stat-number" style="font-size:1.25rem;">@ViewBag.PopularCourse</h3>
+            <span class="stat-trend up"><i class="bi bi-star-fill me-1"></i> Trend</span>
+        </div>
+        <div class="card-glow green"></div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-lg-8">
+        <div class="card-custom glass-card fade-in-up delay-1">
+            <div class="card-custom-header">
+                <h2 class="card-custom-title"><i class="bi bi-activity me-2"></i>Son Aktiviteler</h2>
+                <span class="badge bg-primary rounded-pill">Canlı</span>
+            </div>
+            <div class="card-custom-body">
+                <div class="activity-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-point"></div>
+                        <div class="timeline-content">
+                            <h5 class="activity-title">Yeni Öğrenci Kaydı</h5>
+                            <p class="activity-desc">Sisteme yeni bir kursiyer girişi yapıldı.</p>
+                            <span class="activity-time">5 Dakika Önce</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a asp-controller="Students" asp-action="Index" class="btn btn-outline-primary rounded-pill px-4">Tüm Öğrencileri Gör</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-custom glass-card fade-in-up delay-2">
+            <div class="card-custom-header">
+                <h2 class="card-custom-title"><i class="bi bi-rocket-takeoff-fill me-2"></i>Hızlı İşlemler</h2>
+            </div>
+            <div class="card-custom-body">
+                <div class="quick-link-btns">
+                    <a asp-controller="Students" asp-action="Create" class="quick-btn">
+                        <i class="bi bi-person-plus"></i> Öğrenci Ekle
+                    </a>
+                    <a href="#" class="quick-btn" onclick="showToast('Sertifika modülü yolda!')">
+                        <i class="bi bi-award"></i> Sertifika Yazdır
+                    </a>
+                    <a href="#" class="quick-btn" onclick="showToast('Raporlama hazırlanıyor...')">
+                        <i class="bi bi-file-earmark-pdf"></i> Genel Rapor
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* DASHBOARD STYLES */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-light);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: 0.4s;
+    box-shadow: var(--shadow);
+}
+
+.glass-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: var(--shadow-lg); }
+
+.stat-card { display: flex; align-items: center; gap: 1.5rem; }
+.card-icon { width: 56px; height: 56px; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+
+.card-icon.blue { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+.card-icon.amber { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+.card-icon.green { background: rgba(16, 185, 129, 0.1); color: #34d399; }
+
+.card-glow { position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; filter: blur(40px); z-index: -1; }
+.card-glow.blue { background: rgba(59, 130, 246, 0.2); }
+.card-glow.amber { background: rgba(245, 158, 11, 0.2); }
+.card-glow.green { background: rgba(16, 185, 129, 0.2); }
+
+.stat-label { font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.25rem; }
+.stat-number { font-size: 2.25rem; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.02em; }
+.stat-trend { font-size: 0.75rem; font-weight: 700; margin-top: 0.25rem; display: flex; align-items: center; }
+.stat-trend.up { color: #10b981; }
+.stat-trend.neutral { color: var(--text-secondary); }
+
+.activity-timeline { border-left: 1px solid var(--border-light); padding-left: 2rem; margin-top: 1rem; }
+.timeline-item { position: relative; margin-bottom: 1.5rem; }
+.timeline-point { position: absolute; left: -2rem; top: 8px; width: 12px; height: 12px; background: var(--primary); border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+.card-custom-title { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0; display: inline-flex; align-items: center; }
+.activity-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; }
+.activity-desc { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
+.activity-time { font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; opacity: 0.8; }
+
+.quick-link-btns { display: grid; gap: 1rem; }
+.quick-btn { background: var(--bg); border: 1px solid var(--border-light); padding: 1.25rem; border-radius: 1rem; color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: 1rem; font-weight: 600; transition: 0.3s; }
+.quick-btn:hover { background: var(--primary); border-color: var(--primary); color: white; transform: scale(1.02); box-shadow: var(--shadow); }
+.quick-btn i { font-size: 1.25rem; color: var(--primary); }
+.quick-btn:hover i { color: white; }
+</style>

@@ -10,8 +10,11 @@ using Microsoft.Extensions.Logging;
 using AspNetCoreCrudDemo.Interfaces;
 using AspNetCoreCrudDemo.Models;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace AspNetCoreCrudDemo.Controllers
 {
+    [Authorize]
     public class StudentsController : Controller
     {
         private readonly IStudentRepository _repository;
@@ -26,6 +29,7 @@ namespace AspNetCoreCrudDemo.Controllers
         }
 
         // GET: Students
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Öğrenciler listesi başarıyla görüntülendi.");
@@ -52,6 +56,7 @@ namespace AspNetCoreCrudDemo.Controllers
         }
 
         // GET: Students/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -60,6 +65,7 @@ namespace AspNetCoreCrudDemo.Controllers
         // POST: Students/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("StudentId,Name,Email,Course,EnrollmentDate")] Student student, IFormFile? Photo)
         {
             if (ModelState.IsValid)
@@ -77,6 +83,7 @@ namespace AspNetCoreCrudDemo.Controllers
         }
 
         // GET: Students/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -90,6 +97,7 @@ namespace AspNetCoreCrudDemo.Controllers
         // POST: Students/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("StudentId,Name,Email,Course,EnrollmentDate,PhotoPath")] Student student, IFormFile? Photo)
         {
             if (id != student.StudentId) return NotFound();
@@ -129,6 +137,7 @@ namespace AspNetCoreCrudDemo.Controllers
         // POST: Students/DeletePhoto/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePhoto(int id)
         {
             var student = await _repository.GetByIdAsync(id);
@@ -143,6 +152,7 @@ namespace AspNetCoreCrudDemo.Controllers
         }
 
         // GET: Students/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -154,6 +164,7 @@ namespace AspNetCoreCrudDemo.Controllers
         // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var student = await _repository.GetByIdAsync(id);
@@ -168,6 +179,7 @@ namespace AspNetCoreCrudDemo.Controllers
 
         // GET: Students/Search?q=ali  (AJAX API)
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Search(string q)
         {
             var results = await _repository.SearchAsync(q ?? "");

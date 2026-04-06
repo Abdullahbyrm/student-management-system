@@ -1,0 +1,256 @@
+@model AspNetCoreCrudDemo.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<div class="auth-page-wrapper">
+    <!-- Hareketli Mesh Gradient Arka Plan -->
+    <div class="mesh-bg"></div>
+
+    <div class="auth-container fade-up" style="max-width: 500px;">
+        <div class="auth-logo">
+            <i class="bi bi-mortarboard-fill"></i>
+            <span>StudentMS</span>
+        </div>
+
+        <div class="auth-glass-card">
+            <div class="auth-header">
+                <h2>Hesap Oluştur</h2>
+                <p>Eğitim yolculuğunuza bugün başlayın</p>
+            </div>
+
+            <form asp-action="Register" method="post" class="auth-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger auth-error-summary"></div>
+
+                <div class="auth-input-group">
+                    <label asp-for="Username">Kullanıcı Adı</label>
+                    <div class="input-field">
+                        <i class="bi bi-person-circle"></i>
+                        <input asp-for="Username" placeholder="kullaniciadiniz" autofocus />
+                    </div>
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="auth-input-group">
+                    <label asp-for="Email">E-posta Adresi</label>
+                    <div class="input-field">
+                        <i class="bi bi-envelope-fill"></i>
+                        <input asp-for="Email" placeholder="ornek@mail.com" />
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="auth-input-group">
+                            <label asp-for="Password">Şifre</label>
+                            <div class="input-field">
+                                <i class="bi bi-lock-fill"></i>
+                                <input asp-for="Password" type="password" placeholder="••••••••" />
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="auth-input-group">
+                            <label asp-for="ConfirmPassword">Şifre Tekrar</label>
+                            <div class="input-field">
+                                <i class="bi bi-shield-lock-fill"></i>
+                                <input asp-for="ConfirmPassword" type="password" placeholder="••••••••" />
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-btn" style="margin-top: 1rem;">
+                    <span>Kayıt İşlemini Tamamla</span>
+                    <i class="bi bi-check-circle-fill"></i>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Zaten bir hesabınız var mı? 
+                <a asp-action="Login">Giriş Yapın</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* LOGIN & REGISTER PREMIUM STYLES */
+.auth-page-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    background: #f8fafc; /* LIGHT MODE BACKGROUND */
+    z-index: 9999;
+}
+
+.mesh-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, rgba(34, 197, 94, 0.05) 0, transparent 50%), 
+                radial-gradient(at 50% 100%, rgba(37, 99, 235, 0.15) 0, transparent 50%);
+    z-index: 1;
+    animation: meshShift 15s ease-in-out infinite alternate;
+}
+
+@@keyframes meshShift {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+.auth-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 500px;
+    padding: 2.5rem 1rem;
+}
+
+.auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a; /* TEXT DARK */
+    margin-bottom: 2rem;
+}
+
+.auth-logo i {
+    color: #3b82f6;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+}
+
+.auth-glass-card {
+    background: rgba(255, 255, 255, 0.8); /* LIGHT GLASS */
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.05); /* LIGHT BORDER */
+    border-radius: 2rem;
+    padding: 2.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); /* SOFTER SHADOW */
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+    color: #0f172a; /* TEXT DARK */
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    color: #64748b; /* TEXT GRAY */
+    font-size: 0.95rem;
+}
+
+.auth-input-group {
+    margin-bottom: 1.25rem;
+}
+
+.auth-input-group label {
+    display: block;
+    color: #475569; /* TEXT MEDIUM */
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.input-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-field i {
+    position: absolute;
+    left: 1.25rem;
+    color: #94a3b8;
+    font-size: 1rem;
+}
+
+.input-field input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9); /* LIGHT BG */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    padding: 0.875rem 1.25rem 0.875rem 3.25rem;
+    color: #0f172a; /* TEXT DARK */
+    font-size: 0.9375rem;
+    transition: 0.3s;
+}
+
+.input-field input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.auth-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 20px -5px rgba(37, 99, 235, 0.4);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #64748b; /* GRAY TEXT */
+    font-size: 0.875rem;
+}
+
+.auth-footer a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+.auth-error-summary ul { list-style: none; padding: 0; font-size: 0.8125rem; }
+
+.fade-up {
+    animation: fadeUp 0.8s ease-out forwards;
+}
+
+@@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
